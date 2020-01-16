@@ -1,13 +1,19 @@
 import 'dart:convert';
 
+import 'package:database/adminpage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: ConnectDatabase(),
     theme: ThemeData(),
+    // routes: <String,WidgetBuilder>{
+    //   '/AdminPage' : (BuildContext context) => new AdminPage()
+       
+    // },
   ));
 }
 
@@ -22,7 +28,8 @@ class _ConnectDatabaseState extends State<ConnectDatabase> {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
   TextEditingController contEmail = new TextEditingController();
   TextEditingController contPassword = new TextEditingController();
- 
+  
+  String msg='';
   
   final _key = new GlobalKey<FormState>();
 
@@ -42,24 +49,36 @@ class _ConnectDatabaseState extends State<ConnectDatabase> {
     }
   }
 
-  login() async {
+  Future<List> login() async {
     String email = contEmail.text;
     String password = contPassword.text;
-    final response = await http.post("http://192.168.137.204/Flutter/login.php",
-        body: {"email": email, "password": password});
-    final data = jsonDecode(response.body);
+    final response = await http.post("http://172.20.10.3/Flutter/login.php",
+        body: {
+        "email": email, 
+        "password": password 
+        });
+
+    var data = jsonDecode(response.body);    
+
     int value = data['value'];
     String pesan = data['message'];
     // String password = data['password'];
     String emailAPI = data['email'];
-    String namaAPI = data['nama'];
-    String id = data['id'];
+    int level = data['level'];
+    // int id = data['id'];
     print(data.toString());
     if (value == 1) {
       setState(() {
         _loginStatus = LoginStatus.signIn;
-        savePref(value, emailAPI, namaAPI, id);
+        // savePref(value, emailAPI, namaAPI, id);
+      //   if(data[0]['level']==1){
+      //   print("welcome Favian");
+      // } else if (data[0]['level']==2){
+      //   print("welcome mir");
+      // }
       });
+      // print(data[0]['level'].toString());
+      print(level);
       print(pesan);
       print(emailAPI);
       print(password);
@@ -69,6 +88,7 @@ class _ConnectDatabaseState extends State<ConnectDatabase> {
       print(password);
     }
   }
+
 
   savePref(int value, String email, String nama, String id) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -146,10 +166,12 @@ class _ConnectDatabaseState extends State<ConnectDatabase> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    check();
+                    login();
                   },
                   child: Text("Login"),
                 ),
+
+                Text(msg,style: TextStyle(fontSize: 20, color: Colors.red),)
               ],
             ),
           ),
