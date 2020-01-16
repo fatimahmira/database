@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:database/adminpage.dart';
+import 'package:database/memberpage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,10 +11,12 @@ void main() {
     debugShowCheckedModeBanner: false,
     home: ConnectDatabase(),
     theme: ThemeData(),
-    // routes: <String,WidgetBuilder>{
-    //   '/AdminPage' : (BuildContext context) => new AdminPage()
+    routes: <String,WidgetBuilder>{
+      '/AdminPage' : (BuildContext context) => new AdminPage(),
+      '/MemberPage' : (BuildContext context) => new MemberPage(),
+      
        
-    // },
+    },
   ));
 }
 
@@ -52,7 +55,7 @@ class _ConnectDatabaseState extends State<ConnectDatabase> {
   Future<List> login() async {
     String email = contEmail.text;
     String password = contPassword.text;
-    final response = await http.post("http://172.20.10.3/Flutter/login.php",
+    final response = await http.post("http://172.16.141.33/Flutter/login.php",
         body: {
         "email": email, 
         "password": password 
@@ -66,19 +69,19 @@ class _ConnectDatabaseState extends State<ConnectDatabase> {
     String emailAPI = data['email'];
     int level = data['level'];
     // int id = data['id'];
-    print(data.toString());
+    // print(data.toString());
     if (value == 1) {
       setState(() {
         _loginStatus = LoginStatus.signIn;
         // savePref(value, emailAPI, namaAPI, id);
-      //   if(data[0]['level']==1){
-      //   print("welcome Favian");
-      // } else if (data[0]['level']==2){
-      //   print("welcome mir");
-      // }
+        if(data['level']==1){
+        print("welcome Favian");
+      } else if (data['level']==2){
+        print("welcome mir");
+      }
       });
       // print(data[0]['level'].toString());
-      print(level);
+      // print(level);
       print(pesan);
       print(emailAPI);
       print(password);

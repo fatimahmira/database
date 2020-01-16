@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class AdminPage  extends StatelessWidget {
+class MemberPage  extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("welcome admin"),),
+      appBar: AppBar(title: Text("welcome member"),),
     );
   }
 }
