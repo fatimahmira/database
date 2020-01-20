@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:database/AdminPage.dart';
+import 'package:database/MemberPage.dart';
 import 'package:database/SecondScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -9,12 +11,13 @@ void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     // home: ConnectDatabase(),
-    // initialRoute: '/',
+    initialRoute: '/',
     // theme: ThemeData(),
     routes: <String, WidgetBuilder>{
       '/' : ( context) =>  ConnectDatabase(),
-      '/second' : (context) => SecondScreen(),
-      // '/AdminPage': ( context) =>  AdminPage(),
+      '/AdminPage' : (context) => AdminPage(),
+      '/MemberPage' : (context) => MemberPage(),
+      '/SecondScreen': ( context) =>  SecondScreen(),
       // '/MemberPage': ( context) =>  MemberPage(),
     },
   ));
@@ -55,7 +58,7 @@ class _ConnectDatabaseState extends State<ConnectDatabase> {
   Future<List> login() async {
     String email = contEmail.text;
     String password = contPassword.text;
-    final response = await http.post("http://172.20.10.3/Flutter/login.php",
+    final response = await http.post("http://172.16.141.17/Flutter/login.php",
         body: {"email": email, "password": password});
 
     var data = json.decode(response.body);
@@ -69,12 +72,12 @@ class _ConnectDatabaseState extends State<ConnectDatabase> {
         if (data[0]['level'] == '1') {
           // return ("welcome");
           // print("welcome Favian");
-          // Navigator.pushReplacementNamed(context, ("/AdminPage"));
+          Navigator.pushNamed(context, ("/AdminPage"));
         } else if (data[0]['level'] == '2') {
           // return ("welcome2");
           // print("welcome mir");
-          Navigator.pushNamed(context, '/second');
-          // Navigator.pushReplacementNamed(context, "/MemberPage");
+          // Navigator.pushNamed(context, '/second');
+          Navigator.pushNamed(context, "/MemberPage");
         } else {
           print("welocme nope");
         }
