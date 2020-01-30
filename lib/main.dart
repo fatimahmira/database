@@ -5,7 +5,6 @@ import 'package:database/MemberPage.dart';
 import 'package:database/SecondScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -58,7 +57,7 @@ class _ConnectDatabaseState extends State<ConnectDatabase> {
   Future<List> login() async {
     String email = contEmail.text;
     String password = contPassword.text;
-    final response = await http.post("http://172.16.141.17/Flutter/login.php",
+    final response = await http.post("http://172.20.10.3/Flutter/login.php",
         body: {"email": email, "password": password});
 
     var data = json.decode(response.body);
@@ -67,7 +66,7 @@ class _ConnectDatabaseState extends State<ConnectDatabase> {
       print("login failed");
     } else {
       setState(() {
-        //     // _loginStatus = LoginStatus.signIn;
+            _loginStatus = LoginStatus.signIn;
         //     // savePref(value, emailAPI, namaAPI, id);
         if (data[0]['level'] == '1') {
           // return ("welcome");
